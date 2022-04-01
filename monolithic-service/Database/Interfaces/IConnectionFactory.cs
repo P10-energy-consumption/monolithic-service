@@ -1,10 +1,11 @@
-﻿using System.Data;
+﻿using Npgsql;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace monolithic_service.Database.Interfaces
 {
     public interface IConnectionFactory
     {
-        SqlConnection CreateDBConnection();
+        NpgsqlConnection CreateDBConnection();
     }
 }

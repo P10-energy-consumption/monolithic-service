@@ -1,5 +1,5 @@
 ﻿using monolithic_service.Database.Interfaces;
-using System.Data.SqlClient;
+using Npgsql;
 
 namespace monolithic_service.Database
 {
@@ -11,12 +11,12 @@ namespace monolithic_service.Database
         public ConnectionFactory(IConfiguration configuration)
         {
             _configuration = configuration;
-            _connectionString = new Lazy<string>(() => _configuration.GetValue<string>("mssql"));
+            _connectionString = new Lazy<string>(() => _configuration.GetValue<string>("postgres"));
         }
 
-        public SqlConnection CreateDBConnection()
+        public NpgsqlConnection CreateDBConnection()
         {
-            return new SqlConnection(_connectionString.Value);
+            return new NpgsqlConnection(_connectionString.Value);
         }
     }
 }
