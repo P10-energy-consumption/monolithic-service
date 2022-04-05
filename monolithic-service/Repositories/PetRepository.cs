@@ -19,9 +19,11 @@ namespace monolithic_service.Repositories
         public async Task<int> InsertPet(Pet pet)
         {
             var result = -1;
-            var sql = @"insert into pets (id, name, category, status, tags, created, createdby)
-                        OUTPUT Inserted.ID
-                        values (@id, @name, @category, @status, @tags, CURRENT_TIMESTAMP, 'PetStore.Pet.Api');";
+            var sql = @" /* PetStore.Pet.Api */
+insert into pets.pet (name, category, status, tags, created, createdby)
+values (@name, @category, @status, @tags, current_timestamp, 'PetStore.Pet.Api');
+select currval('pets.pet_id_seq');";
+
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
@@ -49,9 +51,9 @@ namespace monolithic_service.Repositories
         public async Task<int> InsertPetPhoto(Guid photoId, int petId, string metaData, string url)
         {
             var result = -1;
-            var sql = @"insert into photos (id, petid, url, metadata, created, createdby)
-                        OUTPUT Inserted.ID
-                        values (@id, @petid, @url, @metaData, current_timestamp, 'PetStore.Pet.Api')";
+            var sql = @" /* PetStore.Pet.Api */
+insert into pets.photo (id, petid, url, metadata, created, createdby)
+values (@id, @petid, @url, @metaData, current_timestamp, 'PetStore.Pet.Api')";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
@@ -78,8 +80,12 @@ namespace monolithic_service.Repositories
         public async Task<int> DeletePet(int petId)
         {
             var result = -1;
-            var sql = @"delete from pets
-                            where Id = @Id";
+            var sql = @" /* PetStore.Pet.Api */
+update pets.pet set
+Deleted = current_timestamp,
+DeletedBy = 'PetStore.Pet.Api',
+IsDelete = true
+where Id = @Id";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
@@ -141,10 +147,11 @@ where Id = @Id";
         public async Task<Pet> GetPet(int petId)
         {
             var result = new Pet();
-            var sql = @"select Id, Name, Category, Status, Tags 
-                        from pets
-                        where Id = @Id
-                        and IsDelete = 0";
+            var sql = @" /* PetStore.Pet.Api */
+select p.Id, p.Name, p.Category, p.Status, p.Tags 
+from pets.pet p
+where p.Id = @Id
+and p.IsDelete = false";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
@@ -171,10 +178,11 @@ where Id = @Id";
         public async Task<List<Pet>> GetPetByStatus(PetStatus status)
         {
             var result = new List<Pet>();
-            var sql = @"select p.id, p.Name, p.Category, p.Status, p.Tags 
-                        from pets p
-                        where p.IsDelete = 0
-                        and p.status = @status";
+            var sql = @" /* PetStore.Pet.Api */
+select p.id, p.Name, p.Category, p.Status, p.Tags 
+from pets.pet p
+where p.IsDelete = false
+and p.status = @status";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
