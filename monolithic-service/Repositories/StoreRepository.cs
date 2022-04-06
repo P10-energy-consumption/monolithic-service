@@ -20,11 +20,9 @@ namespace monolithic_service.Repositories
         {
             var result = new List<InventoryLine>();
             var sql = @" /* PetStore.Store.Api */
-update orders.order set
-    Deleted = current_timestamp,
-    DeletedBy = 'PetStore.Store.Api',
-    IsDelete = true
-where id = @Id";
+select p.Status, count(p.Id) from pets.pet p
+where p.IsDelete = false
+group by p.Status";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
@@ -51,7 +49,12 @@ where id = @Id";
         public async Task<int> DeleteOrder(int orderId)
         {
             var result = -1;
-            var sql = @"delete from orders where id = @Id";
+            var sql = @" /* PetStore.Store.Api */
+update orders.order set
+    Deleted = current_timestamp,
+    DeletedBy = 'PetStore.Store.Api',
+    IsDelete = true
+where id = @Id";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
