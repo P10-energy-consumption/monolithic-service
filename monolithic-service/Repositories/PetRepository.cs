@@ -18,20 +18,18 @@ namespace monolithic_service.Repositories
 
         public async Task<int> InsertPet(Pet pet)
         {
-            var result = -1;
             var sql = @" /* PetStore.Pet.Api */
-insert into pets.pet (name, category, status, tags, created, createdby)
-values (@name, @category, @status, @tags, current_timestamp, 'PetStore.Pet.Api');
-select currval('pets.pet_id_seq');";
+insert into pets.pet (id, name, category, status, tags, created, createdby)
+values (@id, @name, @category, @status, @tags, current_timestamp, 'PetStore.Pet.Api');";
 
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                await _connection.OpenAsync();
+                _connection.Open();
 
                 try
                 {
-                    result = await _connection.ExecuteScalarAsync<int>(sql, pet);
+                    await _connection.ExecuteAsync(sql, pet);
                 }
                 catch (Exception)
                 {
@@ -40,11 +38,10 @@ select currval('pets.pet_id_seq');";
                 }
                 finally
                 {
-                    await _connection.CloseAsync();
-                    await _connection.DisposeAsync();
+                    _connection.Close();
                 }
 
-                return result;
+                return pet.ID;
             }
         }
 
@@ -57,7 +54,7 @@ values (@id, @petid, @url, @metaData, current_timestamp, 'PetStore.Pet.Api')";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                await _connection.OpenAsync();
+                _connection.Open();
 
                 try
                 {
@@ -70,7 +67,7 @@ values (@id, @petid, @url, @metaData, current_timestamp, 'PetStore.Pet.Api')";
                 }
                 finally
                 {
-                    await _connection.CloseAsync();
+                    _connection.Close();
                 }
 
                 return result;
@@ -81,15 +78,11 @@ values (@id, @petid, @url, @metaData, current_timestamp, 'PetStore.Pet.Api')";
         {
             var result = -1;
             var sql = @" /* PetStore.Pet.Api */
-update pets.pet set
-Deleted = current_timestamp,
-DeletedBy = 'PetStore.Pet.Api',
-IsDelete = true
-where Id = @Id";
+delete from pets.pet where id = @Id"; ;
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                await _connection.OpenAsync();
+                _connection.Open();
 
                 try
                 {
@@ -102,7 +95,7 @@ where Id = @Id";
                 }
                 finally
                 {
-                    await _connection.CloseAsync();
+                    _connection.Close();
                 }
 
                 return result;
@@ -113,7 +106,7 @@ where Id = @Id";
         {
             var result = -1;
             var sql = @" /* PetStore.Pet.Api */
-update pets set
+update pets.pet set
 Name = @Name,
 Status = @Status,
 Tags = @Tags,
@@ -124,11 +117,11 @@ where Id = @Id";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                await _connection.OpenAsync();
+                _connection.Open();
 
                 try
                 {
-                    result = await _connection.ExecuteAsync(sql, pet);
+                    result = await _connection.ExecuteAsync(sql, new { name = pet.Name, status = pet.Status, tags = pet.Tags, category = pet.Category, id = pet.ID});
                 }
                 catch (Exception)
                 {
@@ -137,7 +130,7 @@ where Id = @Id";
                 }
                 finally
                 {
-                    await _connection.CloseAsync();
+                    _connection.Close();
                 }
 
                 return result;
@@ -150,12 +143,11 @@ where Id = @Id";
             var sql = @" /* PetStore.Pet.Api */
 select p.Id, p.Name, p.Category, p.Status, p.Tags 
 from pets.pet p
-where p.Id = @Id
-and p.IsDelete = false";
+where p.Id = @Id";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                await _connection.OpenAsync();
+                _connection.Open();
 
                 try
                 {
@@ -168,7 +160,7 @@ and p.IsDelete = false";
                 }
                 finally
                 {
-                    await _connection.CloseAsync();
+                    _connection.Close();
                 }
 
                 return result;
@@ -186,7 +178,7 @@ and p.status = @status";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                await _connection.OpenAsync();
+                _connection.Open();
 
                 try
                 {
@@ -199,7 +191,7 @@ and p.status = @status";
                 }
                 finally
                 {
-                    await _connection.CloseAsync();
+                    _connection.Close();
                 }
 
                 return result;

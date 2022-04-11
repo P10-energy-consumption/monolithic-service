@@ -26,7 +26,7 @@ group by p.Status";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                await _connection.OpenAsync();
+                _connection.Open();
 
                 try
                 {
@@ -50,15 +50,11 @@ group by p.Status";
         {
             var result = -1;
             var sql = @" /* PetStore.Store.Api */
-update orders.order set
-    Deleted = current_timestamp,
-    DeletedBy = 'PetStore.Store.Api',
-    IsDelete = true
-where id = @Id";
+delete from orders.order where id = @Id";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                await _connection.OpenAsync();
+                _connection.Open();
 
                 try
                 {
@@ -80,17 +76,16 @@ where id = @Id";
         public async Task<Order> PostOrder(Order order)
         {
             var sql = @" /* PetStore.Store.Api */
-insert into orders.order (petid, quantity, shipdate, status, complete, created, createdby) 
-values (@petid, @quantity, @shipdate, @status, @complete, current_timestamp, 'PetStore.Store.Api');
-select currval('orders.order_id_seq');";
+insert into orders.order (id, petid, quantity, shipdate, status, complete, created, createdby) 
+values (@id, @petid, @quantity, @shipdate, @status, @complete, current_timestamp, 'PetStore.Store.Api');";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                await _connection.OpenAsync();
+                _connection.Open();
 
                 try
                 {
-                    await _connection.ExecuteScalarAsync<int>(sql, order);
+                    await _connection.ExecuteAsync(sql, order);
                 }
                 catch (Exception)
                 {
@@ -116,7 +111,7 @@ and o.id = @id";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                await _connection.OpenAsync();
+                _connection.Open();
 
                 try
                 {

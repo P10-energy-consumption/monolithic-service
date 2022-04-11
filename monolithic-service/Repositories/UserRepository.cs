@@ -24,7 +24,7 @@ select currval('users.user_id_seq')";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                await _connection.OpenAsync();
+                _connection.Open();
 
                 try
                 {
@@ -37,8 +37,8 @@ select currval('users.user_id_seq')";
                 }
                 finally
                 {
-                    await _connection.CloseAsync();
-                    await _connection.DisposeAsync();
+                    _connection.Close();
+                    _connection.Dispose();
                 }
 
                 return user.Id;
@@ -56,7 +56,7 @@ and u.UserName = @UserName";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                await _connection.OpenAsync();
+                _connection.Open();
 
                 try
                 {
@@ -69,7 +69,7 @@ and u.UserName = @UserName";
                 }
                 finally
                 {
-                    await _connection.CloseAsync();
+                    _connection.Close();
                 }
 
                 return result;
@@ -95,7 +95,7 @@ where UserName = @UserName";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                await _connection.OpenAsync();
+                _connection.Open();
 
                 try
                 {
@@ -108,7 +108,7 @@ where UserName = @UserName";
                 }
                 finally
                 {
-                    await _connection.CloseAsync();
+                    _connection.Close();
                 }
 
                 return user;
@@ -118,16 +118,12 @@ where UserName = @UserName";
         public async Task<string> DeleteUser(string username)
         {
             var sql = @" /* PetStore.User.Api */
-update users.user set
-    Deleted = current_timestamp,
-    DeletedBy = 'PetStore.User.Api',
-    IsDelete = true
-where username = @username";
+delete from users.user where id = @Id"; ;
 
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                await _connection.OpenAsync();
+                _connection.Open();
 
                 try
                 {
@@ -140,8 +136,7 @@ where username = @username";
                 }
                 finally
                 {
-                    await _connection.CloseAsync();
-                    await _connection.DisposeAsync();
+                    _connection.Close();
                 }
 
                 return username;
