@@ -167,7 +167,7 @@
               <connectTime>true</connectTime>
             </value>
           </objProp>
-          <stringProp name="filename">JMeterSetup.csv.csv</stringProp>
+          <stringProp name="filename">JMeterSetup.csv</stringProp>
         </ResultCollector>
         <hashTree/>
       </hashTree>
