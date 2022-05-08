@@ -14,9 +14,10 @@ namespace monolithic_service.Database
             _connectionString = new Lazy<string>(() => _configuration.GetValue<string>("postgres"));
         }
 
-        public NpgsqlConnection CreateDBConnection()
+        public async Task<NpgsqlConnection> CreateDBConnection()
         {
-            return new NpgsqlConnection(_connectionString.Value);
+            await using var conn = new NpgsqlConnection(_connectionString.Value);
+            return conn;
         }
     }
 }

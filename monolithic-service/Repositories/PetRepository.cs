@@ -23,7 +23,7 @@ insert into pets.pet (id, name, category, status, tags, created, createdby)
 values (@id, @name, @category, @status, @tags, current_timestamp, 'PetStore.Pet.Api');";
 
 
-            using (var _connection = _connectionFactory.CreateDBConnection())
+            using (var _connection = await _connectionFactory.CreateDBConnection())
             {
                 _connection.Open();
 
@@ -38,7 +38,7 @@ values (@id, @name, @category, @status, @tags, current_timestamp, 'PetStore.Pet.
                 }
                 finally
                 {
-                    _connection.Close();
+                    await _connection.CloseAsync();
                 }
 
                 return pet.ID;
@@ -52,9 +52,9 @@ values (@id, @name, @category, @status, @tags, current_timestamp, 'PetStore.Pet.
 insert into pets.photo (id, petid, url, metadata, created, createdby)
 values (@id, @petid, @url, @metaData, current_timestamp, 'PetStore.Pet.Api')";
 
-            using (var _connection = _connectionFactory.CreateDBConnection())
+            using (var _connection = await _connectionFactory.CreateDBConnection())
             {
-                _connection.Open();
+                await _connection.OpenAsync();
 
                 try
                 {
@@ -67,7 +67,7 @@ values (@id, @petid, @url, @metaData, current_timestamp, 'PetStore.Pet.Api')";
                 }
                 finally
                 {
-                    _connection.Close();
+                    await _connection.CloseAsync();
                 }
 
                 return result;
@@ -80,9 +80,9 @@ values (@id, @petid, @url, @metaData, current_timestamp, 'PetStore.Pet.Api')";
             var sql = @" /* PetStore.Pet.Api */
 delete from pets.pet where id = @Id"; ;
 
-            using (var _connection = _connectionFactory.CreateDBConnection())
+            using (var _connection = await _connectionFactory.CreateDBConnection())
             {
-                _connection.Open();
+                await _connection.OpenAsync();
 
                 try
                 {
@@ -95,7 +95,7 @@ delete from pets.pet where id = @Id"; ;
                 }
                 finally
                 {
-                    _connection.Close();
+                    await _connection.CloseAsync();
                 }
 
                 return result;
@@ -115,9 +115,9 @@ Modified = current_timestamp,
 ModifiedBy = 'PetStore.Pet.Api'
 where Id = @Id";
 
-            using (var _connection = _connectionFactory.CreateDBConnection())
+            using (var _connection = await _connectionFactory.CreateDBConnection())
             {
-                _connection.Open();
+                await _connection.OpenAsync();
 
                 try
                 {
@@ -130,7 +130,7 @@ where Id = @Id";
                 }
                 finally
                 {
-                    _connection.Close();
+                    await _connection.CloseAsync();
                 }
 
                 return result;
@@ -145,9 +145,9 @@ select p.Id, p.Name, p.Category, p.Status, p.Tags
 from pets.pet p
 where p.Id = @Id";
 
-            using (var _connection = _connectionFactory.CreateDBConnection())
+            using (var _connection = await _connectionFactory.CreateDBConnection())
             {
-                _connection.Open();
+                await _connection.OpenAsync();
 
                 try
                 {
@@ -160,7 +160,7 @@ where p.Id = @Id";
                 }
                 finally
                 {
-                    _connection.Close();
+                    await _connection.CloseAsync();
                 }
 
                 return result;
@@ -176,9 +176,9 @@ from pets.pet p
 where p.IsDelete = false
 and p.status = @status";
 
-            using (var _connection = _connectionFactory.CreateDBConnection())
+            using (var _connection = await _connectionFactory.CreateDBConnection())
             {
-                _connection.Open();
+                await _connection.OpenAsync();
 
                 try
                 {
@@ -191,7 +191,7 @@ and p.status = @status";
                 }
                 finally
                 {
-                    _connection.Close();
+                    await _connection.CloseAsync();
                 }
 
                 return result;
