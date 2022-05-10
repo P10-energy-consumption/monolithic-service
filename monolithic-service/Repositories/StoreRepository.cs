@@ -24,7 +24,7 @@ select p.Status, count(p.Id) from pets.pet p
 where p.IsDelete = false
 group by p.Status";
 
-            using (var _connection = await _connectionFactory.CreateDBConnection())
+            using (var _connection = _connectionFactory.CreateDBConnection())
             {
                 await _connection.OpenAsync();
 
@@ -40,6 +40,7 @@ group by p.Status";
                 finally
                 {
                     await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
 
                 return result;
@@ -52,7 +53,7 @@ group by p.Status";
             var sql = @" /* PetStore.Store.Api */
 delete from orders.order where id = @Id";
 
-            using (var _connection = await _connectionFactory.CreateDBConnection())
+            using (var _connection = _connectionFactory.CreateDBConnection())
             {
                 await _connection.OpenAsync();
 
@@ -68,6 +69,7 @@ delete from orders.order where id = @Id";
                 finally
                 {
                     await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
             }
             return result; 
@@ -79,7 +81,7 @@ delete from orders.order where id = @Id";
 insert into orders.order (id, petid, quantity, shipdate, status, complete, created, createdby) 
 values (@id, @petid, @quantity, @shipdate, @status, @complete, current_timestamp, 'PetStore.Store.Api');";
 
-            using (var _connection = await _connectionFactory.CreateDBConnection())
+            using (var _connection = _connectionFactory.CreateDBConnection())
             {
                 await _connection.OpenAsync();
 
@@ -95,6 +97,7 @@ values (@id, @petid, @quantity, @shipdate, @status, @complete, current_timestamp
                 finally
                 {
                     await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
             }
 
@@ -109,7 +112,7 @@ from orders.order o
 where o.IsDelete = false
 and o.id = @id";
 
-            using (var _connection = await _connectionFactory.CreateDBConnection())
+            using (var _connection = _connectionFactory.CreateDBConnection())
             {
                 await _connection.OpenAsync();
 
@@ -126,6 +129,7 @@ and o.id = @id";
                 finally
                 {
                     await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
             }
         }

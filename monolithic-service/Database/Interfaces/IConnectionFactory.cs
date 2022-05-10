@@ -6,6 +6,6 @@ namespace monolithic_service.Database.Interfaces
 {
     public interface IConnectionFactory
     {
-        Task<NpgsqlConnection> CreateDBConnection();
+        NpgsqlConnection CreateDBConnection();
     }
 }

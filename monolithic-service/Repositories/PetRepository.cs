@@ -23,7 +23,7 @@ insert into pets.pet (id, name, category, status, tags, created, createdby)
 values (@id, @name, @category, @status, @tags, current_timestamp, 'PetStore.Pet.Api');";
 
 
-            using (var _connection = await _connectionFactory.CreateDBConnection())
+            using (var _connection = _connectionFactory.CreateDBConnection())
             {
                 _connection.Open();
 
@@ -39,6 +39,7 @@ values (@id, @name, @category, @status, @tags, current_timestamp, 'PetStore.Pet.
                 finally
                 {
                     await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
 
                 return pet.ID;
@@ -52,7 +53,7 @@ values (@id, @name, @category, @status, @tags, current_timestamp, 'PetStore.Pet.
 insert into pets.photo (id, petid, url, metadata, created, createdby)
 values (@id, @petid, @url, @metaData, current_timestamp, 'PetStore.Pet.Api')";
 
-            using (var _connection = await _connectionFactory.CreateDBConnection())
+            using (var _connection = _connectionFactory.CreateDBConnection())
             {
                 await _connection.OpenAsync();
 
@@ -68,6 +69,7 @@ values (@id, @petid, @url, @metaData, current_timestamp, 'PetStore.Pet.Api')";
                 finally
                 {
                     await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
 
                 return result;
@@ -80,7 +82,7 @@ values (@id, @petid, @url, @metaData, current_timestamp, 'PetStore.Pet.Api')";
             var sql = @" /* PetStore.Pet.Api */
 delete from pets.pet where id = @Id"; ;
 
-            using (var _connection = await _connectionFactory.CreateDBConnection())
+            using (var _connection = _connectionFactory.CreateDBConnection())
             {
                 await _connection.OpenAsync();
 
@@ -96,6 +98,7 @@ delete from pets.pet where id = @Id"; ;
                 finally
                 {
                     await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
 
                 return result;
@@ -115,7 +118,7 @@ Modified = current_timestamp,
 ModifiedBy = 'PetStore.Pet.Api'
 where Id = @Id";
 
-            using (var _connection = await _connectionFactory.CreateDBConnection())
+            using (var _connection = _connectionFactory.CreateDBConnection())
             {
                 await _connection.OpenAsync();
 
@@ -131,6 +134,7 @@ where Id = @Id";
                 finally
                 {
                     await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
 
                 return result;
@@ -145,7 +149,7 @@ select p.Id, p.Name, p.Category, p.Status, p.Tags
 from pets.pet p
 where p.Id = @Id";
 
-            using (var _connection = await _connectionFactory.CreateDBConnection())
+            using (var _connection = _connectionFactory.CreateDBConnection())
             {
                 await _connection.OpenAsync();
 
@@ -155,12 +159,13 @@ where p.Id = @Id";
                 }
                 catch (Exception)
                 {
-
+                    Console.WriteLine(petId);
                     throw;
                 }
                 finally
                 {
                     await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
 
                 return result;
@@ -176,7 +181,7 @@ from pets.pet p
 where p.IsDelete = false
 and p.status = @status";
 
-            using (var _connection = await _connectionFactory.CreateDBConnection())
+            using (var _connection = _connectionFactory.CreateDBConnection())
             {
                 await _connection.OpenAsync();
 
@@ -192,6 +197,7 @@ and p.status = @status";
                 finally
                 {
                     await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
 
                 return result;
