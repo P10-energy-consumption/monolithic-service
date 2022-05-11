@@ -26,7 +26,7 @@ group by p.Status";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                _connection.Open();
+                await _connection.OpenAsync();
 
                 try
                 {
@@ -39,7 +39,8 @@ group by p.Status";
                 }
                 finally
                 {
-                    _connection.Close();
+                    await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
 
                 return result;
@@ -54,7 +55,7 @@ delete from orders.order where id = @Id";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                _connection.Open();
+                await _connection.OpenAsync();
 
                 try
                 {
@@ -67,7 +68,8 @@ delete from orders.order where id = @Id";
                 }
                 finally
                 {
-                    _connection.Close();
+                    await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
             }
             return result; 
@@ -81,7 +83,7 @@ values (@id, @petid, @quantity, @shipdate, @status, @complete, current_timestamp
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                _connection.Open();
+                await _connection.OpenAsync();
 
                 try
                 {
@@ -94,7 +96,8 @@ values (@id, @petid, @quantity, @shipdate, @status, @complete, current_timestamp
                 }
                 finally
                 {
-                    _connection.Close();
+                    await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
             }
 
@@ -111,7 +114,7 @@ and o.id = @id";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                _connection.Open();
+                await _connection.OpenAsync();
 
                 try
                 {
@@ -125,7 +128,8 @@ and o.id = @id";
                 }
                 finally
                 {
-                    _connection.Close();
+                    await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
             }
         }

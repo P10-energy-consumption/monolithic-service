@@ -18,13 +18,12 @@ namespace monolithic_service.Repositories
         {
             var result = -1;
             var sql = @" /* PetStore.User.Api */
-insert into users.user (username, firstname, lastname, email, passwordhash, salt, phone, status, created, createdby) 
-values (@username, @firstname, @lastname, @email, @passwordhash, @salt, @phone, @status, current_timestamp, 'PetStore.User.Api');
-select currval('users.user_id_seq')";
+insert into users.user (id, username, firstname, lastname, email, passwordhash, salt, phone, status, created, createdby) 
+values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @phone, @status, current_timestamp, 'PetStore.User.Api');";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                _connection.Open();
+                await _connection.OpenAsync();
 
                 try
                 {
@@ -37,8 +36,8 @@ select currval('users.user_id_seq')";
                 }
                 finally
                 {
-                    _connection.Close();
-                    _connection.Dispose();
+                    await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
 
                 return user.Id;
@@ -56,7 +55,7 @@ and u.UserName = @UserName";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                _connection.Open();
+                await _connection.OpenAsync();
 
                 try
                 {
@@ -69,7 +68,8 @@ and u.UserName = @UserName";
                 }
                 finally
                 {
-                    _connection.Close();
+                    await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
 
                 return result;
@@ -95,7 +95,7 @@ where UserName = @UserName";
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                _connection.Open();
+                await _connection.OpenAsync();
 
                 try
                 {
@@ -108,7 +108,8 @@ where UserName = @UserName";
                 }
                 finally
                 {
-                    _connection.Close();
+                    await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
 
                 return user;
@@ -123,7 +124,7 @@ delete from users.user where id = @Id"; ;
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                _connection.Open();
+                await _connection.OpenAsync();
 
                 try
                 {
@@ -136,7 +137,8 @@ delete from users.user where id = @Id"; ;
                 }
                 finally
                 {
-                    _connection.Close();
+                    await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
 
                 return username;
