@@ -21,7 +21,7 @@ namespace monolithic_service.Repositories
 insert into users.user (id, username, firstname, lastname, email, passwordhash, salt, phone, status, created, createdby) 
 values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @phone, @status, current_timestamp, 'PetStore.User.Api');";
 
-            using (var _connection = await _connectionFactory.CreateDBConnection())
+            using (var _connection = _connectionFactory.CreateDBConnection())
             {
                 await _connection.OpenAsync();
 
@@ -37,6 +37,7 @@ values (@id, @username, @firstname, @lastname, @email, @passwordhash, @salt, @ph
                 finally
                 {
                     await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
 
                 return user.Id;
@@ -52,7 +53,7 @@ from users.user u
 where u.IsDelete = false
 and u.UserName = @UserName";
 
-            using (var _connection = await _connectionFactory.CreateDBConnection())
+            using (var _connection = _connectionFactory.CreateDBConnection())
             {
                 await _connection.OpenAsync();
 
@@ -68,6 +69,7 @@ and u.UserName = @UserName";
                 finally
                 {
                     await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
 
                 return result;
@@ -91,7 +93,7 @@ ModifiedBy = 'PetStore.User.Api'
 where UserName = @UserName";
 
 
-            using (var _connection = await _connectionFactory.CreateDBConnection())
+            using (var _connection = _connectionFactory.CreateDBConnection())
             {
                 await _connection.OpenAsync();
 
@@ -107,6 +109,7 @@ where UserName = @UserName";
                 finally
                 {
                     await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
 
                 return user;
@@ -119,7 +122,7 @@ where UserName = @UserName";
 delete from users.user where id = @Id"; ;
 
 
-            using (var _connection = await _connectionFactory.CreateDBConnection())
+            using (var _connection = _connectionFactory.CreateDBConnection())
             {
                 await _connection.OpenAsync();
 
@@ -135,6 +138,7 @@ delete from users.user where id = @Id"; ;
                 finally
                 {
                     await _connection.CloseAsync();
+                    await _connection.DisposeAsync();
                 }
 
                 return username;
