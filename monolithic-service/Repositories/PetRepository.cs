@@ -25,7 +25,7 @@ values (@id, @name, @category, @status, @tags, current_timestamp, 'PetStore.Pet.
 
             using (var _connection = _connectionFactory.CreateDBConnection())
             {
-                _connection.Open();
+                await _connection.OpenAsync();
 
                 try
                 {
@@ -159,7 +159,6 @@ where p.Id = @Id";
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine(petId);
                     throw;
                 }
                 finally
